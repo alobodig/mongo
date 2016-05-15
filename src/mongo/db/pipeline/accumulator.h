@@ -224,22 +224,31 @@ public:
 };
 
 
-class AccumulatorPush final : public Accumulator {
+class AccumulatorPush : public Accumulator {
 public:
-    AccumulatorPush();
 
-    void processInternal(const Value& input, bool merging) final;
-    Value getValue(bool toBeMerged) const final;
-    const char* getOpName() const final;
+    void processInternal(const Value& input, bool merging);
+    Value getValue(bool toBeMerged) const;
+    const char* getOpName() const;
     void reset() final;
 
     static boost::intrusive_ptr<Accumulator> create();
 
-private:
+protected:
+    AccumulatorPush();
     std::vector<Value> vpValue;
 };
 
+    class AccumulatorMedian : public AccumulatorPush {
+        typedef AccumulatorPush Super;
+    public:
+        virtual void processInternal(const Value& input, bool merging);
+        virtual Value getValue(bool toBeMerged) const;
+        virtual const char* getOpName() const;
 
+        static boost::intrusive_ptr<Accumulator> create();
+    };
+ 
 class AccumulatorAvg final : public Accumulator {
 public:
     AccumulatorAvg();
